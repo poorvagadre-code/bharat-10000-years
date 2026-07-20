@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bharat: 10,000 Years — An Interactive Journey Through India's History</title>
+  <meta name="description" content="Experience the staggering length, continuity, and diversity of Indian civilization in an interactive scroll-driven journey from 8000 BCE to the present.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ==================== HUD ==================== -->
+  <header id="hud" role="banner" aria-label="Timeline position">
+    <div class="hud-year" aria-live="polite" aria-label="Current year">2026 CE</div>
+    <div class="hud-era" aria-label="Current era">The Present</div>
+    <div class="hud-ago" aria-label="Years ago">Today</div>
+    <div class="hud-progress" style="width:100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+  </header>
+
+  <!-- ==================== CHAPTER NAV ==================== -->
+  <nav id="chapter-nav" aria-label="Era navigation"></nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section id="hero" aria-label="Welcome">
+    <div class="hero-thread" aria-hidden="true"></div>
+    <div class="hero-content">
+      <h1 class="t-display">Bharat<br><span style="font-size:0.5em;font-weight:400;letter-spacing:0.05em;">10,000 Years</span></h1>
+      <p class="hero-subtitle">The world's oldest living civilization. One scroll.</p>
+      <a href="#timeline-start" class="hero-cta" role="button">Begin the Journey</a>
+    </div>
+    <div class="hero-quote" aria-hidden="true"></div>
+  </section>
+
+  <!-- ==================== TIMELINE ==================== -->
+  <main id="timeline-start" aria-label="Master timeline of Indian civilization">
+    <!-- Theme filters (sticky within timeline only) -->
+    <section id="theme-bar" class="container" aria-label="Filter events by theme" style="padding-top:var(--sp-8);padding-bottom:var(--sp-4);position:sticky;top:var(--hud-h);z-index:var(--z-sticky);background:var(--indigo-night);">
+      <div class="theme-filters" role="toolbar" aria-label="Theme filters">
+        <button class="active" data-theme="all" aria-pressed="true">All</button>
+        <button data-theme="science" aria-pressed="false">Science & Math</button>
+        <button data-theme="art" aria-pressed="false">Art & Architecture</button>
+        <button data-theme="spiritual" aria-pressed="false">Spiritual Traditions</button>
+        <button data-theme="trade" aria-pressed="false">Trade & Economy</button>
+        <button data-theme="women" aria-pressed="false">Women in History</button>
+        <button data-theme="language" aria-pressed="false">Language & Literature</button>
+      </div>
+    </section>
+    <!-- Era chapters rendered by JS -->
+  </main>
+
+  <!-- ==================== MAP: Many Rivers, One Ocean ==================== -->
+  <section id="map-section" class="map-section" aria-label="Interactive map of India's regions">
+    <div class="container-wide">
+      <div style="text-align:center;margin-bottom:var(--sp-8);">
+        <span class="era-label">Explore</span>
+        <h2 class="t-display" style="margin-bottom:var(--sp-4);">Many Rivers, One Ocean</h2>
+        <p style="color:var(--palm-leaf-cream);max-width:36rem;margin:0 auto;">Every region of India carries its own epic. Click a region to discover its story, or pick an empire to watch its rise and fall.</p>
+      </div>
+
+      <!-- Empire Painter Controls -->
+      <div class="empire-controls" role="radiogroup" aria-label="Select an empire to display"></div>
+      <input type="range" class="empire-scrubber" id="empire-scrubber" min="-3300" max="1850" value="320" aria-label="Scrub through time" style="display:none;">
+
+      <div class="map-container">
+        <!-- SVG map of Indian subcontinent -->
+        <svg class="map-svg" viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of the Indian subcontinent with clickable regions">
+          <!-- Simplified outline paths for each region -->
+          <g id="map-regions">
+            <path id="reg-kashmir" class="region" data-region="kashmir" d="M280,40 L320,30 L380,50 L400,80 L370,120 L320,130 L270,110 L260,70 Z" aria-label="Kashmir"/>
+            <path id="reg-punjab" class="region" data-region="punjab" d="M240,110 L320,130 L370,120 L360,170 L300,200 L240,180 L220,140 Z" aria-label="Punjab"/>
+            <path id="reg-gandhara" class="region" data-region="gandhara" d="M200,50 L260,70 L240,110 L220,140 L180,120 L170,80 Z" aria-label="Gandhara"/>
+            <path id="reg-haryana" class="region" data-region="haryana" d="M300,200 L360,170 L380,210 L350,250 L310,240 Z" aria-label="Haryana"/>
+            <path id="reg-rajasthan" class="region" data-region="rajasthan" d="M200,180 L300,200 L310,240 L350,250 L330,330 L260,370 L180,340 L160,260 Z" aria-label="Rajasthan"/>
+            <path id="reg-up" class="region" data-region="up" d="M350,250 L380,210 L450,200 L520,230 L530,280 L480,310 L400,320 L330,330 Z" aria-label="Uttar Pradesh"/>
+            <path id="reg-bihar" class="region" data-region="bihar" d="M520,230 L580,240 L600,280 L560,310 L530,280 Z" aria-label="Bihar"/>
+            <path id="reg-bengal" class="region" data-region="bengal" d="M580,240 L650,260 L660,320 L640,380 L590,370 L560,310 L600,280 Z" aria-label="Bengal"/>
+            <path id="reg-assam" class="region" data-region="assam" d="M650,200 L720,190 L740,230 L700,260 L650,260 Z" aria-label="Northeast / Assam"/>
+            <path id="reg-odisha" class="region" data-region="odisha" d="M530,280 L560,310 L590,370 L560,430 L500,420 L480,370 L480,310 Z" aria-label="Odisha (Kalinga)"/>
+            <path id="reg-mp" class="region" data-region="mp" d="M330,330 L400,320 L480,310 L480,370 L440,420 L360,430 L280,400 L260,370 Z" aria-label="Central India / Madhya Pradesh"/>
+            <path id="reg-gujarat" class="region" data-region="gujarat" d="M120,300 L180,340 L260,370 L280,400 L240,450 L170,470 L100,430 L90,360 Z" aria-label="Gujarat"/>
+            <path id="reg-maharashtra" class="region" data-region="maharashtra" d="M200,430 L280,400 L360,430 L400,480 L370,530 L300,540 L220,510 L180,470 Z" aria-label="Maharashtra"/>
+            <path id="reg-ap" class="region" data-region="ap" d="M400,480 L500,420 L540,470 L520,540 L460,580 L400,560 L370,530 Z" aria-label="Andhra Pradesh / Telangana"/>
+            <path id="reg-karnataka" class="region" data-region="karnataka" d="M220,510 L300,540 L370,530 L400,560 L380,630 L310,660 L250,640 L210,570 Z" aria-label="Karnataka"/>
+            <path id="reg-goa" class="region" data-region="goa" d="M210,570 L220,510 L200,530 L190,560 Z" aria-label="Goa"/>
+            <path id="reg-kerala" class="region" data-region="kerala" d="M250,640 L310,660 L320,730 L290,790 L260,780 L240,720 Z" aria-label="Kerala"/>
+            <path id="reg-tn" class="region" data-region="tn" d="M310,660 L380,630 L460,580 L500,620 L480,700 L420,760 L350,780 L320,730 Z" aria-label="Tamil Nadu"/>
+            <path id="reg-telangana" class="region" data-region="telangana" d="M400,480 L440,420 L500,420 L540,470 L520,540 L460,580 Z" aria-label="Telangana"/>
+            <path id="reg-sindh" class="region" data-region="sindh" d="M120,160 L200,180 L160,260 L120,300 L90,260 L80,200 Z" aria-label="Sindh"/>
+          </g>
+          <!-- Empire overlay group -->
+          <g id="map-empires"></g>
+          <!-- Region labels -->
+          <g id="map-labels" font-family="var(--font-mono)" font-size="9" fill="rgba(255,255,255,0.4)" text-anchor="middle">
+            <text x="320" y="80">Kashmir</text>
+            <text x="290" y="160">Punjab</text>
+            <text x="200" y="95">Gandhara</text>
+            <text x="340" y="225">Haryana</text>
+            <text x="250" y="280">Rajasthan</text>
+            <text x="430" y="270">Uttar Pradesh</text>
+            <text x="560" y="270">Bihar</text>
+            <text x="630" y="320">Bengal</text>
+            <text x="690" y="230">NE India</text>
+            <text x="530" y="370">Odisha</text>
+            <text x="380" y="380">Central India</text>
+            <text x="160" y="400">Gujarat</text>
+            <text x="300" y="490">Maharashtra</text>
+            <text x="470" y="510">Andhra</text>
+            <text x="300" y="610">Karnataka</text>
+            <text x="200" y="560">Goa</text>
+            <text x="270" y="720">Kerala</text>
+            <text x="410" y="690">Tamil Nadu</text>
+            <text x="120" y="230">Sindh</text>
+          </g>
+          <!-- Decorative ocean -->
+          <text x="100" y="680" font-family="var(--font-display)" font-size="14" fill="rgba(255,255,255,0.12)" font-style="italic">Arabian Sea</text>
+          <text x="550" y="780" font-family="var(--font-display)" font-size="14" fill="rgba(255,255,255,0.12)" font-style="italic">Bay of Bengal</text>
+          <text x="400" y="860" font-family="var(--font-display)" font-size="14" fill="rgba(255,255,255,0.12)" font-style="italic">Indian Ocean</text>
+        </svg>
+
+        <!-- Region info popup -->
+        <div id="region-info" style="display:none;position:absolute;top:0;left:0;background:rgba(13,27,42,0.95);border:1px solid var(--turmeric-gold);border-radius:8px;padding:var(--sp-4);max-width:20rem;z-index:var(--z-modal);pointer-events:none;" role="tooltip">
+          <h4 id="region-name" class="t-display" style="font-size:var(--text-lg);color:var(--turmeric-gold);margin-bottom:var(--sp-2);"></h4>
+          <p id="region-desc" style="font-size:var(--text-sm);color:var(--palm-leaf-cream);"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GAMES ==================== -->
+  <section id="games" aria-label="Interactive games and activities">
+
+    <!-- Game 1: Timeline Duel -->
+    <div id="game-timeline-duel" class="game-section container">
+      <h2 class="game-title t-display">Timeline Duel</h2>
+      <p class="game-subtitle">Drag the cards into chronological order before time runs out. Get streaks to unlock harder decks.</p>
+      <div class="theme-filters" role="radiogroup" aria-label="Select deck" style="margin-bottom:var(--sp-6);">
+        <button class="active" data-deck="general">General</button>
+        <button data-deck="southIndia">South India</button>
+        <button data-deck="science">Science</button>
+        <button data-deck="freedomStruggle">Freedom Struggle</button>
+      </div>
+      <div class="score-display">Score: <span id="duel-score">0</span> | Streak: <span id="duel-streak">0</span></div>
+      <div id="duel-cards" style="max-width:40rem;margin:0 auto;display:flex;flex-direction:column;gap:var(--sp-2);"></div>
+      <div style="text-align:center;margin-top:var(--sp-6);">
+        <button id="duel-check" class="hero-cta" style="opacity:1;">Check Order</button>
+        <button id="duel-new" class="hero-cta" style="opacity:1;margin-left:var(--sp-4);">New Round</button>
+      </div>
+    </div>
+
+    <!-- Game 2: Chanakya's Gambit -->
+    <div id="game-gambit" class="game-section container">
+      <h2 class="game-title t-display">Chanakya's Gambit</h2>
+      <p class="game-subtitle">Play as Chandragupta Maurya. Your decisions shape an empire — or destroy it.</p>
+      <div id="gambit-panel" class="gambit-panel"></div>
+      <div style="text-align:center;margin-top:var(--sp-4);">
+        <button id="gambit-restart" class="hero-cta" style="opacity:1;display:none;">Play Again</button>
+      </div>
+    </div>
+
+    <!-- Game 3: Who Am I? -->
+    <div id="game-whoami" class="game-section container">
+      <h2 class="game-title t-display">Who Am I?</h2>
+      <p class="game-subtitle">Progressive clues reveal a historical figure. Guess early for bonus points!</p>
+      <div class="score-display">Score: <span id="whoami-score">0</span> | Round: <span id="whoami-round">1</span>/10</div>
+      <div id="whoami-panel" class="whoami-panel"></div>
+    </div>
+
+    <!-- Game 4: Match the Marvel -->
+    <div id="game-match" class="game-section container">
+      <h2 class="game-title t-display">Match the Marvel</h2>
+      <p class="game-subtitle">Pair each Indian invention with its era. How well do you know your heritage?</p>
+      <div class="score-display">Matched: <span id="match-count">0</span>/8</div>
+      <div id="match-inventions" class="match-grid"></div>
+      <div id="match-eras" class="match-grid" style="margin-top:var(--sp-4);"></div>
+      <div id="match-feedback" style="text-align:center;margin-top:var(--sp-4);font-family:var(--font-display);font-style:italic;color:var(--turmeric-light);min-height:2rem;"></div>
+    </div>
+
+    <!-- Game 5: Build the Brihadeeswara -->
+    <div id="game-temple" class="game-section container">
+      <h2 class="game-title t-display">Build the Brihadeeswara</h2>
+      <p class="game-subtitle">Drag the temple tiers into the correct order — bottom to top — and learn how Rajaraja Chola's engineers raised an 80-tonne capstone in 1010 CE.</p>
+      <div class="temple-builder">
+        <div id="temple-canvas" class="temple-canvas" aria-label="Temple construction area">
+          <p style="color:var(--ink-light);font-size:var(--text-sm);position:absolute;top:50%;transform:translateY(-50%);">Drop tiers here in order</p>
+        </div>
+        <div id="temple-parts" class="temple-parts" aria-label="Available temple parts"></div>
+      </div>
+      <div id="temple-info" style="max-width:40rem;margin:var(--sp-6) auto 0;text-align:center;font-style:italic;color:var(--turmeric-light);min-height:3rem;"></div>
+    </div>
+
+    <!-- Game 6: Decode the Indus -->
+    <div id="game-indus" class="game-section container">
+      <h2 class="game-title t-display">Decode the Indus</h2>
+      <p class="game-subtitle">Match the Sindhu–Saraswati seals to their animals. The script remains undeciphered — perhaps you will be the one.</p>
+      <div class="score-display">Matched: <span id="indus-count">0</span>/8</div>
+      <div id="indus-grid" class="seal-grid" style="max-width:40rem;"></div>
+      <div id="indus-message" style="text-align:center;margin-top:var(--sp-6);color:var(--bronze-patina);font-family:var(--font-display);font-style:italic;min-height:2rem;"></div>
+    </div>
+  </section>
+
+  <!-- ==================== END CARD ==================== -->
+  <section id="end-card" aria-label="Journey complete">
+    <div class="end-stat" id="end-years">10,000</div>
+    <p class="end-message">years of unbroken civilization. You just scrolled through the story of Bharat — the world's oldest living culture.</p>
+    <p style="color:var(--ink-light);margin-bottom:var(--sp-8);font-size:var(--text-sm);">How far back did you travel?</p>
+    <button class="share-btn" id="share-btn">Share Your Journey</button>
+  </section>
+
+  <!-- ==================== DATA ==================== -->
+  <script src="js/data-eras.js"></script>
+  <script src="js/data-events-1.js"></script>
+  <script src="js/data-events-2.js"></script>
+  <script src="js/data-events-3.js"></script>
+  <script src="js/data-events-4.js"></script>
+  <script src="js/data-empires.js"></script>
+  <script src="js/data-figures.js"></script>
+  <script src="js/data-games.js"></script>
+
+  <!-- ==================== APP ==================== -->
+  <script src="js/app.js"></script>
+  <script src="js/monuments.js"></script>
+  <script src="js/coins.js"></script>
+  <script src="js/particles.js"></script>
+</body>
+</html>
