@@ -9,7 +9,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
@@ -22,11 +22,20 @@
 
   <!-- ==================== HUD ==================== -->
   <header id="hud" role="banner" aria-label="Timeline position">
-    <div class="hud-year" aria-live="polite" aria-label="Current year">2026 CE</div>
-    <div class="hud-era" aria-label="Current era">The Present</div>
-    <div class="hud-ago" aria-label="Years ago">Today</div>
+    <div class="hud-left">
+      <div class="hud-label">YOU ARE HERE</div>
+      <div class="hud-year" aria-live="polite" aria-label="Current year">2026 CE</div>
+      <div class="hud-era" aria-label="Current era">The Present</div>
+    </div>
+    <div class="hud-right">
+      <div class="hud-devanagari" aria-hidden="true">२०२६</div>
+      <div class="hud-ago" aria-label="Years ago">Today</div>
+    </div>
     <div class="hud-progress" style="width:100%" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
   </header>
+
+  <!-- Central golden thread -->
+  <div id="central-thread" class="central-thread" aria-hidden="true"></div>
 
   <!-- ==================== CHAPTER NAV ==================== -->
   <nav id="chapter-nav" aria-label="Era navigation"></nav>
@@ -35,9 +44,15 @@
   <section id="hero" aria-label="Welcome">
     <div class="hero-thread" aria-hidden="true"></div>
     <div class="hero-content">
-      <h1 class="t-display">Bharat<br><span style="font-size:0.5em;font-weight:400;letter-spacing:0.05em;">10,000 Years</span></h1>
+      <p class="hero-overline">THE UNBROKEN THREAD</p>
+      <h1 class="t-display hero-title">Bharat</h1>
+      <div class="hero-year-line">
+        <span class="hero-line-left" aria-hidden="true"></span>
+        <span class="hero-year-text">10,000 Years</span>
+        <span class="hero-line-right" aria-hidden="true"></span>
+      </div>
       <p class="hero-subtitle">The world's oldest living civilization. One scroll.</p>
-      <a href="#timeline-start" class="hero-cta" role="button">Begin the Journey</a>
+      <a href="#timeline-start" class="hero-cta" role="button">Travel Deeper</a>
     </div>
     <div class="hero-quote" aria-hidden="true"></div>
   </section>
@@ -45,7 +60,8 @@
   <!-- ==================== TIMELINE ==================== -->
   <main id="timeline-start" aria-label="Master timeline of Indian civilization">
     <!-- Theme filters (sticky within timeline only) -->
-    <section id="theme-bar" class="container" aria-label="Filter events by theme" style="padding-top:var(--sp-8);padding-bottom:var(--sp-4);position:sticky;top:var(--hud-h);z-index:var(--z-sticky);background:var(--indigo-night);">
+    <section id="theme-bar" class="container" aria-label="Filter events by theme" style="padding-top:var(--sp-8);padding-bottom:var(--sp-4);position:sticky;top:var(--hud-h);z-index:var(--z-sticky);background:var(--bg-night);">
+      <div class="theme-bar-label">EXPLORE BY LENS</div>
       <div class="theme-filters" role="toolbar" aria-label="Theme filters">
         <button class="active" data-theme="all" aria-pressed="true">All</button>
         <button data-theme="science" aria-pressed="false">Science & Math</button>

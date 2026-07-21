@@ -50,6 +50,15 @@
     return ago.toLocaleString() + ' years ago';
   }
 
+  // Convert digits to Devanagari
+  function toDevanagari(str) {
+    const devDigits = '०१२३४५६७८९';
+    return String(str).replace(/[0-9]/g, d => devDigits[parseInt(d)]);
+  }
+
+  // Roman numerals for era numbering
+  const ROMAN_NUMERALS = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII'];
+
   // ---- Odometer (rolling digit animation for HUD year) ----
   const Odometer = {
     _built: false,
@@ -188,7 +197,7 @@
       return spine;
     }
 
-    eraOrder.forEach(eraId => {
+    eraOrder.forEach((eraId, eraIndex) => {
       const era = window.BHARAT_ERAS.find(e => e.id === eraId);
       if (!era) return;
 
@@ -207,14 +216,19 @@
       section.style.minHeight = dtHeight + 'vh';
       section.setAttribute('data-duration', Math.abs(era.end - era.start));
 
-      // Header
+      // Roman numeral for era
+      const roman = ROMAN_NUMERALS[eraIndex] || (eraIndex + 1);
+
+      // Header — editorial left-aligned with Roman numeral
       const header = document.createElement('div');
       header.className = 'era-header container';
       header.innerHTML = `
+        <div class="era-numeral">${roman}</div>
         <div class="era-label">${era.range}</div>
         <h2 class="era-title">${era.label}</h2>
+        <div class="era-subtitle">${era.range}</div>
         <p class="era-hook">${era.hook}</p>
-        <p style="margin-top:var(--sp-4);color:${era.palette.ink};opacity:0.7;max-width:42rem;margin-left:auto;margin-right:auto;">${era.summary}</p>
+        <p style="margin-top:var(--sp-4);color:${era.palette.ink};opacity:0.7;max-width:42rem;">${era.summary}</p>
         ${Math.abs(era.end - era.start) >= 300 ? `<div class="deep-time-badge"><span>${Math.abs(era.end - era.start).toLocaleString()} years</span></div>` : ''}
       `;
       section.appendChild(header);
@@ -276,6 +290,7 @@
     const hudYear = hud.querySelector('.hud-year');
     const hudEra = hud.querySelector('.hud-era');
     const hudAgo = hud.querySelector('.hud-ago');
+    const hudDev = hud.querySelector('.hud-devanagari');
     const hudProgress = hud.querySelector('.hud-progress');
     const heroEl = document.getElementById('hero');
     const chapters = document.querySelectorAll('.era-chapter');
@@ -360,6 +375,12 @@
       hudEra.textContent = era.label;
       hudEra.style.color = era.palette.accent;
       hudAgo.textContent = yearsAgo(midYear);
+
+      // Devanagari numerals
+      if (hudDev) {
+        const absYear = Math.abs(midYear);
+        hudDev.textContent = toDevanagari(absYear);
+      }
 
       // Update root CSS vars for era palette
       document.documentElement.style.setProperty('--era-accent', era.palette.accent);
