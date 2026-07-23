@@ -434,44 +434,49 @@
       }
     });
 
-    // 2. Hide world-context ribbons when filtering (they're between events)
+    // 2. Hide world-context ribbons when filtering
     document.querySelectorAll('.world-context').forEach(wc => {
       wc.style.display = isAll ? '' : 'none';
     });
 
-    // 3. Collapse eras that have zero visible events when filtering
+    // 3. Collapse / shrink / restore era sections
     document.querySelectorAll('.era-chapter').forEach(section => {
+      // Save original deep-time height on first filter
+      if (!section.dataset.dtHeight) {
+        section.dataset.dtHeight = section.style.minHeight || '';
+      }
+
+      const header = section.querySelector('.era-header');
+      const spine  = section.querySelector('.deep-time-spine');
+
       if (isAll) {
-        // Restore deep-time min-height and visibility
-        section.classList.remove('era-collapsed');
-        const dur = parseInt(section.getAttribute('data-duration') || '0');
-        section.style.minHeight = section.dataset.dtHeight || '';
-        section.querySelector('.era-header').style.display = '';
-        section.querySelector('.deep-time-spine')?.style.setProperty('display', '');
+        // Full restore
+        section.style.display = '';
+        section.style.minHeight = section.dataset.dtHeight;
+        section.style.padding = '';
+        section.style.overflow = '';
+        if (header) header.style.display = '';
+        if (spine)  spine.style.display = '';
       } else {
         const visibleCards = section.querySelectorAll('.event-card:not([style*="display: none"])');
         if (visibleCards.length === 0) {
-          // No matching events — collapse this entire era
-          section.classList.add('era-collapsed');
-          if (!section.dataset.dtHeight) {
-            section.dataset.dtHeight = section.style.minHeight;
-          }
-          section.style.minHeight = '0';
-          section.querySelector('.era-header').style.display = 'none';
-          const spine = section.querySelector('.deep-time-spine');
-          if (spine) spine.style.display = 'none';
+          // Zero matching events — completely hide via display:none
+          section.style.display = 'none';
         } else {
-          // Has matching events — show era but with reduced height
-          section.classList.remove('era-collapsed');
-          if (!section.dataset.dtHeight) {
-            section.dataset.dtHeight = section.style.minHeight;
-          }
-          section.style.minHeight = 'auto';
-          section.querySelector('.era-header').style.display = '';
-          section.querySelector('.deep-time-spine')?.style.setProperty('display', '');
+          // Has matches — show, but collapse deep-time height
+          section.style.display = '';
+          section.style.minHeight = '0px';
+          section.style.padding = 'var(--sp-8) 0 var(--sp-6)';
+          if (header) header.style.display = '';
+          if (spine)  spine.style.display = 'none';
         }
       }
     });
+
+    // 4. Refresh ScrollTrigger so pin/trigger positions match new layout
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.refresh();
+    }
   }
 
   // ---- Map & Empire Painter ----
