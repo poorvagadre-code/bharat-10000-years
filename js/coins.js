@@ -10,33 +10,33 @@
       era: 'classical',
       label: 'Kushana Gold Dinar',
       desc: 'Kanishka I, c. 127 CE — The Kushanas minted bilingual coins blending Greek, Indian, and Iranian traditions.',
-      color: '#d4a03c',
+      color: '#c9a345',
       front: {
         // Standing king with flames at shoulders (Kanishka)
         paths: [
           // Coin rim
-          { d: 'M60,10 A50,50 0 1,1 59.9,10', stroke: '#d4a03c' },
+          { d: 'M60,10 A50,50 0 1,1 59.9,10', stroke: '#c9a345' },
           // Inner rim
-          { d: 'M60,18 A42,42 0 1,1 59.9,18', stroke: '#d4a03c', dash: '2,2' },
+          { d: 'M60,18 A42,42 0 1,1 59.9,18', stroke: '#c9a345', dash: '2,2' },
           // Standing figure (simplified Kanishka)
-          { d: 'M60,35 L60,80 M60,50 L45,60 M60,50 L75,60 M60,80 L50,100 M60,80 L70,100', stroke: '#d4a03c' },
+          { d: 'M60,35 L60,80 M60,50 L45,60 M60,50 L75,60 M60,80 L50,100 M60,80 L70,100', stroke: '#c9a345' },
           // Crown
-          { d: 'M52,35 L60,25 L68,35', stroke: '#d4a03c' },
+          { d: 'M52,35 L60,25 L68,35', stroke: '#c9a345' },
           // Flame at shoulders
-          { d: 'M45,42 Q42,35 45,30 M75,42 Q78,35 75,30', stroke: '#d4a03c' },
+          { d: 'M45,42 Q42,35 45,30 M75,42 Q78,35 75,30', stroke: '#c9a345' },
         ]
       },
       back: {
         // Seated Buddha or Shiva
         paths: [
-          { d: 'M60,10 A50,50 0 1,1 59.9,10', stroke: '#d4a03c' },
-          { d: 'M60,18 A42,42 0 1,1 59.9,18', stroke: '#d4a03c', dash: '2,2' },
+          { d: 'M60,10 A50,50 0 1,1 59.9,10', stroke: '#c9a345' },
+          { d: 'M60,18 A42,42 0 1,1 59.9,18', stroke: '#c9a345', dash: '2,2' },
           // Seated figure cross-legged
-          { d: 'M60,40 L60,70 M45,70 Q60,78 75,70 M60,45 L48,55 M60,45 L72,55', stroke: '#d4a03c' },
+          { d: 'M60,40 L60,70 M45,70 Q60,78 75,70 M60,45 L48,55 M60,45 L72,55', stroke: '#c9a345' },
           // Halo
-          { d: 'M45,35 Q60,20 75,35', stroke: '#d4a03c' },
+          { d: 'M45,35 Q60,20 75,35', stroke: '#c9a345' },
           // Lotus seat
-          { d: 'M42,75 Q50,72 55,75 Q60,78 65,75 Q70,72 78,75', stroke: '#d4a03c' },
+          { d: 'M42,75 Q50,72 55,75 Q60,78 65,75 Q70,72 78,75', stroke: '#c9a345' },
         ]
       }
     },

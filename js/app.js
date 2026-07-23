@@ -224,7 +224,6 @@
       header.className = 'era-header container';
       header.innerHTML = `
         <div class="era-numeral">${roman}</div>
-        <div class="era-label">${era.range}</div>
         <h2 class="era-title">${era.label}</h2>
         <div class="era-subtitle">${era.range}</div>
         <p class="era-hook">${era.hook}</p>
@@ -422,13 +421,55 @@
   }
 
   function filterEvents() {
+    const isAll = STATE.activeTheme === 'all';
+
+    // 1. Show/hide individual event cards
     const cards = document.querySelectorAll('.event-card');
     cards.forEach(card => {
-      if (STATE.activeTheme === 'all') {
+      if (isAll) {
         card.style.display = '';
       } else {
         const themes = card.getAttribute('data-themes');
         card.style.display = themes.includes(STATE.activeTheme) ? '' : 'none';
+      }
+    });
+
+    // 2. Hide world-context ribbons when filtering (they're between events)
+    document.querySelectorAll('.world-context').forEach(wc => {
+      wc.style.display = isAll ? '' : 'none';
+    });
+
+    // 3. Collapse eras that have zero visible events when filtering
+    document.querySelectorAll('.era-chapter').forEach(section => {
+      if (isAll) {
+        // Restore deep-time min-height and visibility
+        section.classList.remove('era-collapsed');
+        const dur = parseInt(section.getAttribute('data-duration') || '0');
+        section.style.minHeight = section.dataset.dtHeight || '';
+        section.querySelector('.era-header').style.display = '';
+        section.querySelector('.deep-time-spine')?.style.setProperty('display', '');
+      } else {
+        const visibleCards = section.querySelectorAll('.event-card:not([style*="display: none"])');
+        if (visibleCards.length === 0) {
+          // No matching events — collapse this entire era
+          section.classList.add('era-collapsed');
+          if (!section.dataset.dtHeight) {
+            section.dataset.dtHeight = section.style.minHeight;
+          }
+          section.style.minHeight = '0';
+          section.querySelector('.era-header').style.display = 'none';
+          const spine = section.querySelector('.deep-time-spine');
+          if (spine) spine.style.display = 'none';
+        } else {
+          // Has matching events — show era but with reduced height
+          section.classList.remove('era-collapsed');
+          if (!section.dataset.dtHeight) {
+            section.dataset.dtHeight = section.style.minHeight;
+          }
+          section.style.minHeight = 'auto';
+          section.querySelector('.era-header').style.display = '';
+          section.querySelector('.deep-time-spine')?.style.setProperty('display', '');
+        }
       }
     });
   }
